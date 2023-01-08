@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 function getContacts() {
     return  [
-        1 => ['name' => 'Anderson César', 'phone' => '79991426969'],
-        2 => ['name' => 'Jhully Nascimento', 'phone' => '79581365'],
-        3 => ['name' => 'Ana Rebelo', 'phone' => '79852365']
+        // 1 => ['id' => 1, 'name' => 'Anderson César', 'phone' => '79991426969'],
+        // 2 => ['id' => 2, 'name' => 'Jhully Nascimento', 'phone' => '79581365'],
+        // 3 => ['id' => 3, 'name' => 'Ana Rebelo', 'phone' => '79852365']
     ];
 }
 
@@ -28,9 +28,14 @@ Route::get('/', function () {
 
 Route::get('/contacts', function () {
 
+    $companies = [
+        1 => ['name' => 'Company Google', 'contacts' => 3],
+        2 => ['name' => 'Company Oracle', 'contacts' => 5]
+    ];
+
     $contacts = getContacts();
 
-    return view('contacts.index', compact('contacts'));
+    return view('contacts.index', compact('contacts', 'companies'));
 })->name('contacts.index');
 
 Route::get('/contacts/create', function () {
