@@ -6,7 +6,6 @@ class View
 
     private static array $vars = [];
 
-
     /**
      * Define as variáveis padrões da view
      * @param array $vars

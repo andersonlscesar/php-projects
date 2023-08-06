@@ -3,6 +3,7 @@ namespace App\Http;
 
 use Closure;
 use Exception;
+use ReflectionFunction;
 
 class Route 
 {
@@ -33,7 +34,15 @@ class Route
                 $params['controller'] = $value;
             }
         }
-    
+
+        $params['variables'] = [];
+        $patternVariables = '/{(.*?)}/';
+
+        if (preg_match_all($patternVariables, $route, $matches)) {
+            $route = preg_replace($patternVariables, '(.*?)', $route);
+            $params['variables'] = $matches[1];
+        }
+        
         $patterRoute = '/^' . str_replace('/', '\/', $route) . '$/';
         $this->routes[$patterRoute][$method] = $params;
     }
@@ -62,8 +71,12 @@ class Route
         $httpMethod = $this->request->getHttpMethod();
         
         foreach ($this->routes as $pattern => $method) {
-            if ( preg_match($pattern, $uri)) {
+            if ( preg_match($pattern, $uri, $matches)) {
                 if( isset($method[$httpMethod]) ) {
+                    unset($matches[0]);
+                    $keys = $method[$httpMethod]['variables'];
+                    $method[$httpMethod]['variables'] = array_combine($keys, $matches);
+                    $method[$httpMethod]['variables']['request'] = $this->request;
                     return $method[$httpMethod];
                 }
 
@@ -81,6 +94,12 @@ class Route
 
             if (!isset($route['controller'])) throw new Exception('Erro interno', 500);
             $args = [];
+            $reflection = new ReflectionFunction($route['controller']);
+
+            foreach ($reflection->getParameters() as $parameter) {
+                $name = $parameter->getName();
+                $args[$name] = $route['variables'][$name] ?? [];
+            }
             return call_user_func_array($route['controller'], $args);
             
 
