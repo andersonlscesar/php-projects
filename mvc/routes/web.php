@@ -10,6 +10,13 @@ $route->get('/sobre', [
     fn() => new Response(200, Pages\SobreController::index())
 ]);
 
-$route->get('/pagina/{idPagina}/{acao}', [
-    fn($idPagina, $acao) => new Response(200, "Página $idPagina - $acao")
+$route->get('/depoimentos', [
+    fn() => new Response(200, Pages\DepoimentoController::index())
 ]);
+
+$route->post('/depoimentos', [
+    fn($request) => new Response(200, Pages\DepoimentoController::index())
+]);
+
+
+
