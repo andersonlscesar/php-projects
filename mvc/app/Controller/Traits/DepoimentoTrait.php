@@ -28,4 +28,5 @@ trait DepoimentoTrait
 
         return $itens;
     }
+
 }

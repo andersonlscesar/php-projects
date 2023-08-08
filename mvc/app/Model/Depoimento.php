@@ -1,15 +1,15 @@
 <?php
 namespace App\Model;
 
-use PDO;
 use App\Db\Db;
+use App\Paginator\Paginator;
 
-class Depoimento
+class Depoimento extends Paginator
 {
     public $id;
     public $nome;
     public $mensagem;
-    public $data;
+    public $data;    
 
     public function insert()
     {   
@@ -22,7 +22,6 @@ class Depoimento
         $this->id = (new Db('depoimentos'))->insert($data);
         return true;
     }
-
     /**
      * Projeta os dados do banco
      * @param string $where
@@ -35,6 +34,15 @@ class Depoimento
 
     public static function select($where = null, $order = null, $limit = null, $fields = "*") 
     {
-        return (new Db('depoimentos'))->select($where, $order, $limit);
+        return (new Db('depoimentos'))->select($where, $order, $limit, $fields);
+    }
+
+    /**
+     * Retorna a quantidade de registros
+     */
+
+    public static function getAmount()
+    {
+        return (new Db('depoimentos'))->select(null, null, null, 'COUNT(*) as amount')->fetchObject()->amount;
     }
 }

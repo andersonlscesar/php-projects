@@ -17,6 +17,8 @@ class DepoimentoController extends Controller
 
     public static function index(): string
     {               
+
+        $amount = Depoimento::getAmount();
         $content = View::render('pages/depoimentos', [
             'depoimentos'   => empty(self::selectAllDepoimentos()) ? 'Ainda não há postagens' : self::selectAllDepoimentos()
         ]);        
