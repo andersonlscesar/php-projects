@@ -15,7 +15,7 @@ $route->get('/depoimentos', [
 ]);
 
 $route->post('/depoimentos', [
-    fn($request) => new Response(200, Pages\DepoimentoController::index())
+    fn($request) => new Response(200, Pages\DepoimentoController::store($request))
 ]);
 
 
