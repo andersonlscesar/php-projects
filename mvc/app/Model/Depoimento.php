@@ -2,9 +2,8 @@
 namespace App\Model;
 
 use App\Db\Db;
-use App\Paginator\Paginator;
 
-class Depoimento extends Paginator
+class Depoimento 
 {
     public $id;
     public $nome;

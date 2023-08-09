@@ -6,6 +6,7 @@ use App\Model\Depoimento;
 use App\Controller\Traits\DepoimentoTrait;
 
 
+
 class DepoimentoController extends Controller
 {
     use DepoimentoTrait;
@@ -15,12 +16,11 @@ class DepoimentoController extends Controller
      * @return string
      */
 
-    public static function index(): string
-    {               
-
-        $amount = Depoimento::getAmount();
+    public static function index($request): string
+    {
         $content = View::render('pages/depoimentos', [
-            'depoimentos'   => empty(self::selectAllDepoimentos()) ? 'Ainda não há postagens' : self::selectAllDepoimentos()
+            'depoimentos'   => empty(self::selectAllDepoimentos($request, $paginator)) ? 'Ainda não há postagens' : self::selectAllDepoimentos($request, $paginator),
+            'pagination'    => $paginator->paginate($request)    
         ]);        
         return parent::view('Depoimentos', $content);
     }

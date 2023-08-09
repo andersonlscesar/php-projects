@@ -3,6 +3,7 @@ namespace App\Controller\Traits;
 
 use App\Model\Depoimento;
 use App\Utils\View;
+use App\Paginator\Paginator;
 
 trait DepoimentoTrait
 {
@@ -12,9 +13,13 @@ trait DepoimentoTrait
      * Esta trait é chamada na DepoimentoController
      */
 
-    public static function selectAllDepoimentos()
+    public static function selectAllDepoimentos($request, &$paginator)
     {
-        $res = Depoimento::select(null, 'id DESC');
+        $amount = Depoimento::getAmount();
+        $currentPage = $request->getQueryParams()['pagina'] ?? 1;  
+        $paginator = new Paginator($amount, $currentPage, 1);
+        $res = Depoimento::select(null, 'id DESC', $paginator->getLimit());       
+        
         $itens = '';
 
             while ($ob = $res->fetchObject(Depoimento::class)) {
