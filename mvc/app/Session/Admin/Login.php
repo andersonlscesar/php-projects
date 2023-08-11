@@ -29,4 +29,21 @@ class Login
         ];
         return true;
     }
+
+
+    public static function isLogged()
+    {
+        self::init();
+
+        return isset($_SESSION['admin']['usuario']['id']);
+    }
+
+    public static function logout()
+    {
+        self::init();
+        unset($_SESSION['admin']['usuario']);
+        session_unset();
+        session_destroy();
+        return true;
+    }
 }

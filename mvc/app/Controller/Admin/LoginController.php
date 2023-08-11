@@ -16,7 +16,7 @@ class LoginController extends Controller
     public static function index($request): string
     {        
         $content = View::render('admin/login');
-        return parent::view('Sobre', $content);
+        return parent::view('Login', $content);
     }
 
 
@@ -25,6 +25,7 @@ class LoginController extends Controller
         $post = $request->getPostVars();
         $email = $post['email'] ?? '';
         $senha = $post['senha'] ?? '';
+
         $usuario = Usuario::getUserByEmail($email);
 
         if (!$usuario instanceof Usuario) {
@@ -35,12 +36,18 @@ class LoginController extends Controller
         if (!password_verify($senha, $usuario->senha)) {
             header("Location: " . getenv('URL') . '/admin/login?status=senha-incorreta');
             exit;
-        } 
-
+        }
 
         Login::login($usuario);
 
         $request->getRoute()->redirect('/admin');
 
+    }
+
+
+    public static function logout($request)
+    {
+        Login::logout();
+        $request->getRoute()->redirect('/admin/login');
     }
 }
