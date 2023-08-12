@@ -1,0 +1,19 @@
+<h1>{{title}}</h1>
+
+<hr>
+
+<a href="{{URL}}/admin/depoimentos"><button class="btn btn-warning">Voltar</button></a>
+
+<hr>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" name="nome" id="nome" class="form-control" required value="{{nome}}">
+    </div>
+    <div class="form-group my-3">
+        <label for="mensagem">Mensagemn</label>
+        <textarea name="mensagem" id="mensagem" class="form-control" required rows="5">{{mensagem}}</textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Enviar</button>
+</form>

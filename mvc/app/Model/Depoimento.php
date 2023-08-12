@@ -36,6 +36,11 @@ class Depoimento
         return (new Db('depoimentos'))->select($where, $order, $limit, $fields);
     }
 
+    public static function get($where = null, $order = null, $limit = null, $fields = "*")
+    {
+        return (new Db('depoimentos'))->select($where, $order, $limit, $fields)->fetchObject(self::class);
+    }
+
     /**
      * Retorna a quantidade de registros
      */
@@ -43,5 +48,20 @@ class Depoimento
     public static function getAmount()
     {
         return (new Db('depoimentos'))->select(null, null, null, 'COUNT(*) as amount')->fetchObject()->amount;
+    }
+
+    public function update(): bool
+    {
+        $data = [
+            'nome'      => $this->nome,
+            'mensagem'  => $this->mensagem
+        ];
+        return (new Db('depoimentos'))->update('id = ' . $this->id, $data);
+    }
+
+
+    public function delete($depoimento)
+    {
+        return (new Db('depoimentos'))->delete('id = ' . $depoimento->id);
     }
 }

@@ -60,6 +60,11 @@ class Route
         $this->addRoute('POST', $route, $params);
     }
 
+    public function delete($route, $params = [])
+    {
+        $this->addRoute('DELETE', $route, $params);
+    }
+
     private function getUri()
     {
         $uri = $this->request->getUri();

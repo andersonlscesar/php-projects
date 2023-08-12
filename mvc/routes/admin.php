@@ -5,7 +5,7 @@ use App\Http\Response;
 
 $route->get('/admin', [
     'middlewares' => ['require-admin-login'],
-    fn() => new Response(200, 'Admin')
+    fn($request) => new Response(200, Admin\HomeController::index($request))
 ]);
 
 $route->get('/admin/login', [

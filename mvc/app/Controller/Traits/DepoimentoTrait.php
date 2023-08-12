@@ -17,7 +17,7 @@ trait DepoimentoTrait
     {
         $amount = Depoimento::getAmount();
         $currentPage = $request->getQueryParams()['pagina'] ?? 1;  
-        $paginator = new Paginator($amount, $currentPage, 1);
+        $paginator = new Paginator($amount, $currentPage, 5);
         $res = Depoimento::select(null, 'id DESC', $paginator->getLimit());       
         
         $itens = '';
@@ -30,6 +30,29 @@ trait DepoimentoTrait
                 ]);
             }
         
+
+        return $itens;
+    }
+
+
+    public static function selectAllDepoimentosAdmin($request, &$paginator)
+    {
+        $amount = Depoimento::getAmount();
+        $currentPage = $request->getQueryParams()['pagina'] ?? 1;
+        $paginator = new Paginator($amount, $currentPage, 5);
+        $res = Depoimento::select(null, 'id DESC', $paginator->getLimit());
+
+        $itens = '';
+
+        while ($ob = $res->fetchObject(Depoimento::class)) {
+            $itens .= View::render('admin/modules/depoimento/item', [
+                'id'            => $ob->id,
+                'nome'          => $ob->nome,
+                'depoimento'    => $ob->mensagem,
+                'data'          => date('d/m/Y H:i:s',strtotime($ob->data))
+            ]);
+        }
+
 
         return $itens;
     }
