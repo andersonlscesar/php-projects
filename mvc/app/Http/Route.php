@@ -52,17 +52,12 @@ class Route
     
     public function get($route, $params = []) 
     {
-        $this->addRoute('GET', $route, $params);
+        return $this->addRoute('GET', $route, $params);
     }
 
     public function post($route, $params = []) 
     {
-        $this->addRoute('POST', $route, $params);
-    }
-
-    public function delete($route, $params = [])
-    {
-        $this->addRoute('DELETE', $route, $params);
+        return $this->addRoute('POST', $route, $params);
     }
 
     private function getUri()
@@ -72,9 +67,6 @@ class Route
         return end($uri);
     }
 
-    /**
-     * @throws Exception
-     */
     private function getRoute()
     {
         $uri = $this->getUri();
@@ -111,13 +103,15 @@ class Route
                 $args[$name] = $route['variables'][$name] ?? [];
             }
             return (new Queue($route['middlewares'], $route['controller'], $args))->next($this->request);
+           
+            
 
         } catch (Exception $e) {
             return new Response($e->getCode(), $e->getMessage());
         }
     }
 
-    public function getCurrentUrl(): string
+    public function getCurrentUrl()
     {
         return $this->url.$this->getUri();
     }
@@ -126,7 +120,6 @@ class Route
     public function redirect($route)
     {
         $url = $this->url.$route;
-        header("Location: " . $url);
-        exit;
+
     }
 }
