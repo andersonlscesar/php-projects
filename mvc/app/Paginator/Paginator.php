@@ -43,10 +43,11 @@ class Paginator
     }
 
 
-    private function totalPages()
+    public function totalPages()
     {
         $this->pages = $this->results > 0 ?  ceil($this->results / $this->itemPerPage) : 1;
         $this->currentPage = $this->currentPage <= $this->pages ? $this->currentPage : $this->pages;
+        
     }
     
     public function getLimit()

@@ -12,6 +12,7 @@ class Route
     private $prefix;
     private $routes = [];
     private $request;
+    private $contentType = 'text/html';
 
     public function __construct($url)
     {
@@ -20,6 +21,10 @@ class Route
         $this->setPrefix();            
     }
 
+    public function setContentType($contentType)
+    {
+        $this->contentType = $contentType;
+    }
 
     private function setPrefix()
     {
@@ -64,7 +69,7 @@ class Route
     {
         $uri = $this->request->getUri();
         $uri = strlen($this->prefix) ? explode($this->prefix, $uri) : [$uri];
-        return end($uri);
+        return rtrim(end($uri), '/') ;
     }
 
     private function getRoute()
@@ -107,7 +112,7 @@ class Route
             
 
         } catch (Exception $e) {
-            return new Response($e->getCode(), $e->getMessage());
+            return new Response($e->getCode(), $this->getErrorMessage($e->getMessage()), $this->contentType);
         }
     }
 
@@ -120,6 +125,26 @@ class Route
     public function redirect($route)
     {
         $url = $this->url.$route;
+        header("Location: " . $url);
+        exit;
+    }
 
+
+    /**
+     * Retorna a mensagem de erro de acordo com o content type 
+     * @param string $message
+     * @return mixed
+     */
+    private function getErrorMessage($message)
+    {
+        switch ($this->contentType)
+        {
+            case 'application/json':
+                return [
+                    'error' => $message
+                ];
+            default:
+                return $message;
+        }
     }
 }

@@ -21,7 +21,8 @@ View::init([
 Queue::setMap([
     'maintenance'           => App\Http\Middleware\Maintenance::class,
     'require-admin-logout'  => App\Http\Middleware\RequireAdminLogout::class,
-    'require-admin-login'   => App\Http\Middleware\RequireAdminLogin::class
+    'require-admin-login'   => App\Http\Middleware\RequireAdminLogin::class,
+    'api'                   => App\Http\Middleware\Api::class
 
 ]);
 
