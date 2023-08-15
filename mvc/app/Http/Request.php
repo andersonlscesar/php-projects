@@ -1,6 +1,7 @@
 <?php
 namespace App\Http;
 
+
 class Request
 {
     private $httpMethod;
@@ -9,16 +10,17 @@ class Request
     private $postVars = [];
     private $headers = [];
     private Route $route;
+    public  $user;
 
 
     public function __construct($route)
     {
-        $this->queryParams  = $_GET ?? [];
-        $this->postVars     = $_POST ?? [];
+        $this->queryParams  = $_GET ?? [];        
         $this->headers      = getallheaders();
         $this->httpMethod   = $_SERVER['REQUEST_METHOD'] ?? '';        
         $this->route        = $route;
         $this->setUri();
+        $this->setPostVars();
     }
 
     private function setUri()
@@ -49,6 +51,16 @@ class Request
     {
         return $this->queryParams;
     }
+
+
+    private function setPostVars()
+    {
+        if ($this->httpMethod == 'GET') return false;
+        $this->postVars = $_POST ?? [];
+        $inputRaw = file_get_contents('php://input');
+        $this->postVars = (strlen($inputRaw) && empty($_POST)) ? json_decode($inputRaw, true) : $this->postVars;
+    }
+
 
     public function getPostVars()
     {

@@ -45,7 +45,7 @@ class Depoimento extends Api
     public static function getDepoimento($request, $id): array
     {
         if (!is_numeric($id)) throw new Exception("Identificador inválido", 400);
-        
+
         $depoimento = ModelDepoimento::select(' id = ' . $id)->fetchObject( ModelDepoimento::class );
 
         if (!$depoimento instanceof ModelDepoimento) throw new Exception("Depoimento não foi encontrado", 404);        
@@ -56,5 +56,56 @@ class Depoimento extends Api
             'mensagem'  => $depoimento->mensagem,
             'data'      => $depoimento->data
         ];
+    }
+
+
+    public static function store($request): array
+    {
+        $post = $request->getPostVars();
+        if (!isset($post['nome']) || !isset($post['mensagem'])) throw new Exception("Prencha todos os campos", 400);
+
+        $depoimento = new ModelDepoimento;
+        $depoimento->nome = $post['nome'];
+        $depoimento->mensagem = $post['mensagem'];
+        $depoimento->insert();
+
+        return [
+            'id'        => (int) $depoimento->id,
+            'nome'      => $depoimento->nome,
+            'mensagem'  => $depoimento->mensagem,
+            'data'      => $depoimento->data
+        ];
+    }
+
+
+
+    public static function update($request, $id): array
+    {
+        $post = $request->getPostVars();
+        if (!isset($post['nome']) || !isset($post['mensagem'])) throw new Exception("Prencha todos os campos", 400);
+
+        $depoimento = ModelDepoimento::select(' id = ' . $id )->fetchObject( ModelDepoimento::class );
+
+        if (!$depoimento instanceof ModelDepoimento) throw new Exception("Depoimento não encontrado", 404);
+
+        $depoimento->nome = $post['nome'];
+        $depoimento->mensagem = $post['mensagem'];
+        $depoimento->update();
+
+        return [
+            'id'        => (int) $depoimento->id,
+            'nome'      => $depoimento->nome,
+            'mensagem'  => $depoimento->mensagem,
+            'data'      => $depoimento->data
+        ];
+    }
+
+
+    public static function delete($id)
+    {
+        $depoimento = ModelDepoimento::select( 'id = ' . $id )->fetchObject( ModelDepoimento::class );
+
+        if (!$depoimento instanceof ModelDepoimento ) throw new Exception("Depoimento não encontrado", 404);
+        $depoimento->delete($depoimento);
     }
 }
